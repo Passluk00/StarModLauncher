@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog, messagebox
+from PIL import Image, ImageTk
 
 
 
@@ -11,10 +12,17 @@ class TopWindow(tk.Toplevel):
         super().__init__(parent)
         self.setup = setup
         self.title("Select Root File .asar")
-        self.geometry("800x200")
+        self.geometry("800x400")
         self.resizable(False, False)
         
         self.selected_file = tk.StringVar()
+        
+        self.logo = Image.open("ui/asset/MadeByTheCommunity_Black.png")
+        self.logo = self.logo.resize((150,150))
+        self.logo_img = ImageTk.PhotoImage(self.logo)
+        
+        self.labelImg = ttk.Label(self, image=self.logo_img)
+        self.labelImg.pack(pady=10)
         
         ttk.Label(self, text="File Path Selected: ").pack(pady=5)
         self.entry = ttk.Entry(self, textvariable=self.selected_file, width=50, state="readonly")

@@ -12,19 +12,25 @@ class LoadSetup:
         
     def LoadOrCreateData(self):
         if os.path.exists(self.filePath):
-            print("File Already Existed")
+            print("Loading file")
             return self.LoadFile()
             
         else:
             print("File not found, new one will be created")
             predef_data = {"PathFile": "", "Projects": []}
             self.WriteFile(predef_data)
+            return predef_data
             
     def LoadFile(self):
         
         try:
             with open(self.filePath, "r", encoding="utf-8") as f:
-                return json.load(f)
+                var = json.load(f)
+                
+                if var:
+                    return var
+                else:
+                    return {} 
             
         except json.JSONDecodeError:
             print("Error found while loading file: config.json")
