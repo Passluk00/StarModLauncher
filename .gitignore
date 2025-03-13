@@ -11,6 +11,7 @@ dev/app.asar
 projects/
 fileHandler/
 config.json
+todo.txt
 
 # Distribution / packaging
 .Python
