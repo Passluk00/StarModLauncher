@@ -1,6 +1,9 @@
 import tkinter
 from tkinter import ttk
+from tkhtmlview import HTMLLabel
 from PIL import Image, ImageTk
+from ui.webPreview import WebPreview
+from ui.webPreviewQ import WebPreviewQ
 
 
 class MainContent(ttk.Frame):
@@ -35,5 +38,13 @@ class MainContent(ttk.Frame):
         
         self.currentPath = self.setup.ReadPath(project_name)
         
-        ttk.Label(self,text=f"path: {self.currentPath}").pack(pady=20)
+       
+        # test con pyqt5
+        #self.web_preview = WebPreviewQ(self.currentPath)
+        #self.web_preview.show_preview()
+        
+        
+       # Crea una finestra di WebPreview con tkinterweb
+        self.window = WebPreview(self,self.currentPath)
+        self.window.pack(fill="both", expand=True, padx=5, pady=5)
         

@@ -74,13 +74,12 @@ class SideBar(ttk.Frame):
 
         pathFile = self.setup.GetRootPath()
 
-        print(f"Path in ingrresso per decomprimere: {pathFile}")
-
         if not os.path.exists(pathFile):
             print( f"Errore apertura file il percorso non è valido: {pathFile}")
 
         extraction_path = os.path.join(os.getcwd(), "projects" , newProjectName)  # Definisci la cartella dove vuoi decomprimere
     
+        
     
     
         # Verifica se la cartella di destinazione esiste, se no la crea
@@ -95,6 +94,8 @@ class SideBar(ttk.Frame):
 
         try: 
             subprocess.run(com, check=True, shell=True)
+            
+            
             
             self.setup.SaveData(newProjectName, extraction_path)
             

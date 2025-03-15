@@ -38,7 +38,7 @@ class LoadSetup:
       
         
     def WriteFile(self, newData):
-        
+            
         with open(self.filePath, "w", encoding="utf-8") as f:
             json.dump(newData, f, indent=4)
             
@@ -63,7 +63,12 @@ class LoadSetup:
     def ReadPath(self, projectName):
         
         if projectName in self.dati:
-            return self.dati[projectName]
+            string = str(self.dati[projectName]).strip("[]")  # Converte la lista in una stringa
+            string = os.path.normpath(string).replace("\\", "/").replace("'","")
+            
+            print(f"{string}")
+                    
+            return string
         
         else:
             print("Project not Found")
@@ -74,6 +79,8 @@ class LoadSetup:
     ## TODO DA controllare se va implementato meglio 
     
     def SaveData(self, key, val):    
+            
+        
         if key in self.dati:
             if isinstance(self.dati[key], list):
                 self.dati[key].append(val)
@@ -83,8 +90,7 @@ class LoadSetup:
         else:
             self.dati[key] = [val]
             
-        self.WriteFile(self.dati);
-        print(f"Valore aggiunto {key}: {val}")
+        self.WriteFile(self.dati)
     
     
     # Salva projetto tramite il nome gia dato 
