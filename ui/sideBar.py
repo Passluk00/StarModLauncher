@@ -5,9 +5,11 @@ from ui.topWindow import TopWindow
 import subprocess
 import uuid
 
+import customtkinter as ctk
 
 
-class SideBar(ttk.Frame):
+
+class SideBar(ctk.CTkFrame):
     
     def __init__(self, parent, setup, mainContent):
         super().__init__(parent, width=200)
@@ -20,7 +22,7 @@ class SideBar(ttk.Frame):
         
     
         # Pulsante per selezionare la root path del file sorgente
-        root = ttk.Button(self,text="select Root File", command=self.openFileSelector)
+        root = ctk.CTkButton(self,text="select Root File", command=self.openFileSelector)
         root.pack(fill="x", padx=5, pady=5)
         
         # Tree Viewper la lita dei progetti
@@ -33,7 +35,7 @@ class SideBar(ttk.Frame):
         
         
         # Pulsante per aggiungere un nuovo progetto
-        add_button = ttk.Button(self, text="+ Nuovo Progetto", command=self.add_project, style="Green.TButton")
+        add_button = ctk.CTkButton(self, text="+ Nuovo Progetto", command=self.add_project)
         add_button.pack(fill="x", padx=5, pady=5)
         
         self.project_list.bind("<<TreeviewSelect>>", self.select_project)
@@ -97,7 +99,7 @@ class SideBar(ttk.Frame):
             
             
             
-            self.setup.SaveData(newProjectName, extraction_path)
+            self.setup.SaveData(newProjectName, "Path", extraction_path)
             
             
             print("Estrazione avventua con successo!")

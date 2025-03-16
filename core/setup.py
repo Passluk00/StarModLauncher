@@ -63,7 +63,7 @@ class LoadSetup:
     def ReadPath(self, projectName):
         
         if projectName in self.dati:
-            string = str(self.dati[projectName]).strip("[]")  # Converte la lista in una stringa
+            string = str(self.dati[projectName]["Path"]).strip("[]")  # Converte la lista in una stringa
             string = os.path.normpath(string).replace("\\", "/").replace("'","")
             
             print(f"{string}")
@@ -78,29 +78,53 @@ class LoadSetup:
     
     ## TODO DA controllare se va implementato meglio 
     
-    def SaveData(self, key, val):    
-            
-        
-        if key in self.dati:
-            if isinstance(self.dati[key], list):
-                self.dati[key].append(val)
-            else:
-                self.dati[key] = [self.dati[key], val]
-                
+    
+    def SaveData(self, key, sub_key, val):    
+    # Se la key principale non esiste, la creiamo come dizionario vuoto
+        if key not in self.dati:
+            self.dati[key] = {}
+
+        # Se la sub_key non esiste, la creiamo con il valore in una lista
+        if sub_key not in self.dati[key]:
+            self.dati[key][sub_key] = val
         else:
-            self.dati[key] = [val]
-            
+            # Se la sub_key esiste già, aggiungiamo il valore
+            if self.dati[key][sub_key]:
+                self.dati[key][sub_key] = (val)
+            else:
+                self.dati[key][sub_key] = [self.dati[key][sub_key], val]
+
+        # Scriviamo i dati aggiornati nel file
         self.WriteFile(self.dati)
-    
-    
-    # Salva projetto tramite il nome gia dato 
-    
-    
-    
-    
     
     
     
     def GetRootPath(self):
         if self.dati:
             return self.dati["PathFile"]
+        
+    
+    
+    def LoadData(self,projectname, key):
+        
+        if self.dati:
+            
+            if self.dati[projectname]:
+                
+                if self.dati[projectname][key]:
+                    return self.dati[projectname][key]
+
+                else:
+                    print(f"Dato non trovato: {projectname}, {key}")
+                []
+                
+            else:
+                print(f"Project non trovato: {projectname}")
+                []
+            
+        else:
+            print(f"File non valido errore")
+            return []
+                
+
+    

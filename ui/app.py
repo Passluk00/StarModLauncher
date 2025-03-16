@@ -5,7 +5,11 @@ from ui.webPreview import WebPreview
 from ui.mainWindow import MainContent
 from core.setup import LoadSetup
 
-class App(tk.Tk):
+import customtkinter as ctk
+
+
+
+class App(ctk.CTk):
     
     
     def __init__(self):

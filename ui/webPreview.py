@@ -21,6 +21,9 @@ class WebPreview(tk.Frame):
         print(f"test path index: {index_path}")
         # Verifica se il percorso esiste e carica il file
         if os.path.exists(index_path):
+  
+  
+  
             self.layout.load_url(f"file:///{index_path}")  # Carica il file HTML come URL locale
   #          self.layout.load_url("https://www.google.it/")
         else:
