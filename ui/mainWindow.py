@@ -363,32 +363,55 @@ class MainContent(ctk.CTkFrame):
         r = int(hex_color[0:2], 16)
         g = int(hex_color[2:4], 16)
         b = int(hex_color[4:6], 16)
+    
 
         return (r, g, b)
             
         
     def replace_color_in_image(self, old, new):
         if self.original_image is None or new is None:
-            print("Select an image and color to edit.")
+            print("Seleziona un'immagine e un colore da modificare.")
             return
 
-        # Convertimg to an numpy array
+        # Converti l'immagine in un array numpy
         image_np = np.array(self.original_image)
 
-        # Define Tollerance
-        tolerance = 1
+        # Tolleranza per trovare i pixel da cambiare
+        tolleranza = 1
         r, g, b = old
 
-        # Mask to select pixels to modify
-        mask = (
-            (np.abs(image_np[:, :, 0] - r) < tolerance) &
-            (np.abs(image_np[:, :, 1] - g) < tolerance) &
-            (np.abs(image_np[:, :, 2] - b) < tolerance)
-        )
+        # Se l'immagine ha 3 canali (RGB)
+        if image_np.shape[2] == 3:
+            mask = (
+                (np.abs(image_np[:, :, 0] - r) < tolleranza) &
+                (np.abs(image_np[:, :, 1] - g) < tolleranza) &
+                (np.abs(image_np[:, :, 2] - b) < tolleranza)
+            )
 
-        # Apply new Color
-        image_np[mask] = new
+            image_np[mask] = new  # new deve essere (r, g, b)
 
-        # Create new Modded Img
-        new_image = Image.fromarray(image_np.astype('uint8'), 'RGB')
-        self.update_preview(new_image)
+            # Crea la nuova immagine
+            nuova_immagine = Image.fromarray(image_np.astype('uint8'), 'RGB')
+
+        # Se l'immagine ha 4 canali (RGBA)
+        elif image_np.shape[2] == 4:
+            mask = (
+                (np.abs(image_np[:, :, 0] - r) < tolleranza) &
+                (np.abs(image_np[:, :, 1] - g) < tolleranza) &
+                (np.abs(image_np[:, :, 2] - b) < tolleranza)
+            )
+
+            # Aggiungi il valore alfa se manca
+            if len(new) == 3:
+                new = (*new, 255)
+
+            image_np[mask] = new  # new deve essere (r, g, b, a)
+
+            nuova_immagine = Image.fromarray(image_np.astype('uint8'), 'RGBA')
+
+        else:
+            print("Formato immagine non supportato.")
+            return
+
+        # Aggiorna l'anteprima con l'immagine modificata
+        self.update_preview(nuova_immagine)
