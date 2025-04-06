@@ -54,13 +54,22 @@ class SideBar(ctk.CTkFrame):
     def add_project(self):
         
         new_project_name = simpledialog.askstring("New Project", "Insert Name For the Project:")
+        
+        if not new_project_name:
+            messagebox.showerror("Error", "Project name cannot be empty!")
+            return
+        
         if new_project_name:
             if new_project_name in self.projects:
                 messagebox.showwarning("Error", "Project already exist!")
                 return
 
         self.projects.append(new_project_name)
-        self.decomprimi(new_project_name)
+        
+        # va aggiornato viene creata la cartella ma ancora non decomprimo waaste of space
+        
+        self.createFolder(new_project_name)
+        
         self.update_project_list()
 
 
@@ -71,24 +80,30 @@ class SideBar(ctk.CTkFrame):
             project_name = self.project_list.item(selected_item[0], "text")
             self.mainContent.updateContent(project_name)
 
-
-    def decomprimi(self, newProjectName):
-
-        pathFile = self.setup.GetRootPath()
+    def createFolder(self, newProjectName):
+        
+        pathFile = self.setup.GetOriginalPath()
 
         if not os.path.exists(pathFile):
             print( f"Errore apertura file il percorso non è valido: {pathFile}")
 
         extraction_path = os.path.join(os.getcwd(), "projects" , newProjectName)  # Definisci la cartella dove vuoi decomprimere
     
-        
-    
-    
         # Verifica se la cartella di destinazione esiste, se no la crea
         if not os.path.exists(extraction_path):
             os.makedirs(extraction_path)
             print(f"Cartella creata: {extraction_path}")
             
+        self.setup.SaveData(newProjectName, "Path", extraction_path)
+
+
+
+
+
+    ###  TODO   Da spostare ora non viene piu decompressa al momento della creazione del progetto ma quando viene applicato
+    def decomprimi(self, newProjectName):
+
+         
     
         com = f'npx asar extract "{pathFile}" {extraction_path}'
         
@@ -114,6 +129,9 @@ class SideBar(ctk.CTkFrame):
         except Exception as e:
         # Gestione di eventuali altri errori generali
             print(f"Errore generico: {e}")
+
+
+    # Open the file selector Window
 
     def openFileSelector(self):
         TopWindow(self, self.setup)

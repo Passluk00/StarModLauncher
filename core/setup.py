@@ -17,7 +17,7 @@ class LoadSetup:
             
         else:
             print("File not found, new one will be created")
-            predef_data = {"PathFile": "", "Projects": []}
+            predef_data = {"PathFile": "","OrigianlFile": "" ,"DefaultImg": "ui\asset\Default_Img.png" , "Projects": []}
             self.WriteFile(predef_data)
             return predef_data
             
@@ -59,6 +59,10 @@ class LoadSetup:
             self.dati["PathFile"] = data
             self.WriteFile(self.dati)
     
+    def SaveBackUpPath(self,data):
+        if data:
+            self.dati["OrigianlFile"] = data
+            self.WriteFile(self.dati)    
     
     def ReadPath(self, projectName):
         
@@ -102,7 +106,14 @@ class LoadSetup:
     def GetRootPath(self):
         if self.dati:
             return self.dati["PathFile"]
+    
+    def GetOriginalPath(self):
+        if self.dati:
+            return self.dati["OrigianlFile"]
         
+    def GetDefaultImg(self):
+        if self.dati:
+            return self.dati["DefaultImg"]
     
     
     def LoadData(self,projectname, key):
@@ -116,15 +127,38 @@ class LoadSetup:
 
                 else:
                     print(f"Dato non trovato: {projectname}, {key}")
-                []
+                    
+                    return []
                 
             else:
                 print(f"Project non trovato: {projectname}")
-                []
+                return []
             
         else:
             print(f"File non valido errore")
             return []
                 
 
+    def ModData(self, currentPath, data):
+        
+        self.workingPath = currentPath
+        
+        # Prendi Vari file
+        # 
+        #   Devo prendere il main.js 
+        #
+        
+        # Modifica file
+        #
+        #   cerco la stringa specifica
+        #   la sostituisco con i nuovi valori  
     
+        # Comprimi File
+        #
+        #   
+        #
+        
+        # Sostituisci file cambiato con quello modificato
+        #
+        #
+        #

@@ -12,6 +12,7 @@ projects/
 fileHandler/
 config.json
 todo.txt
+test.py
 
 # Distribution / packaging
 .Python
