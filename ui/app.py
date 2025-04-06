@@ -1,7 +1,7 @@
 import tkinter as tk
 from core.config import name, version, minDim
 from ui.sideBar import SideBar
-from ui.webPreview import WebPreview
+
 from ui.mainWindow import MainContent
 from core.setup import LoadSetup
 
@@ -18,9 +18,16 @@ class App(ctk.CTk):
         self.setup = LoadSetup()
         
         
+        
+        x = (self.winfo_screenwidth() // 2) - (minDim[0] // 2)
+        y = (self.winfo_screenheight() // 2) - (minDim[1] // 2)
+        
+        
+        
+        
     # Main Setup
         self.title(f'{name} {version}')
-        self.geometry( f'{minDim[0]}x{minDim[1]}' )        
+        self.geometry( f'{minDim[0]}x{minDim[1]}+{x}+{y}' )        
         self.minsize( minDim[0],minDim[1] )
         
     # Grid Setup

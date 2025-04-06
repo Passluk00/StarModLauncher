@@ -32,16 +32,14 @@ class MainContent(ctk.CTkFrame):
         
         self.label = ctk.CTkLabel(self, text="To get Started Select a Project or Create One").pack(padx=4, pady=20)
       
-        ## Aggiungere una Label con il nome del Progetto
+       
+       
         
         
     def updateContent(self, project_name):
         
         
-        # InitalVariables
-        
-        self.test = "0a1d29"
-    
+        # InitalVariables    
         
         self.solcolorprimary1 = "#0a1d29"            # Usage: Darkest background area, the subpage on the right in options uses it.
         self.solcolorprimary2 = "#0f2c3e"            # Usage: Used together with primary-1 and is one of the most used colors.
@@ -111,10 +109,7 @@ class MainContent(ctk.CTkFrame):
         self.solcoloraccent1rgbNew = "84 173 247"  
         self.solcoloraccent2rgbNew = "109 185 248"  
         self.solcoloraccent3rgbNew = "158 208 250"            
-        
-        
-        
-        
+            
        
         # Update Setup
         
@@ -127,7 +122,7 @@ class MainContent(ctk.CTkFrame):
         self.loadOrCreateSetup(self.projectName)
     
         # Preview Image
-        self.image_label = ctk.CTkLabel(self, text="")
+        self.image_label = ctk.CTkLabel(self, text="", width=1440, height=810)
         self.image_label.pack(pady=10)
         self.LoadImg(self.projectName)
 
@@ -330,24 +325,30 @@ class MainContent(ctk.CTkFrame):
         
         if os.path.isfile(file_path):
             print(f"File found: {file_path}")
-            self.original_image = Image.open(file_path).convert("RGB")
-            self.update_preview(self.original_image)
+            self.original_image = Image.open(file_path).convert("RGBA")
+            
             
         else:
             print("File not found will be created now")
             shutil.copyfile("ui\\asset\\default_img.png", file_path)
-            self.original_image = Image.open(file_path).convert("RGB")
-            self.update_preview(self.original_image)
+            self.original_image = Image.open(file_path).convert("RGBA")        
+        
+        self.update_preview(self.original_image)
+        
+        
+        
+        
         
     
     def update_preview(self, image):
         
-        image.save(self.currentPath + "\\theme_img.png")
+        image.save(self.currentPath + "\\theme_img.png", format="PNG")
         
         # Resize for Preview
         preview_image = image.copy()
-        preview_image.thumbnail((900, 900))
-        self.tk_image = ImageTk.PhotoImage(preview_image)
+        preview_image.thumbnail((1440, 810), Image.LANCZOS)
+        
+        self.tk_image = CTkImage(light_image=preview_image.convert("RGBA"), dark_image=preview_image.convert("RGBA"),size=(1440,810))
         self.image_label.configure(image=self.tk_image)
         
         
