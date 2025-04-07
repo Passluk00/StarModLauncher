@@ -118,35 +118,98 @@ class MainContent(ctk.CTkFrame):
         for widget in self.winfo_children():
             widget.destroy()
     
+       
+    
         # Load Project Data
         self.loadOrCreateSetup(self.projectName)
     
         # Preview Image
-        self.image_label = ctk.CTkLabel(self, text="", width=1440, height=810)
-        self.image_label.pack(pady=10)
+        self.image_label = ctk.CTkLabel(self, text="", width=1080, height=608)
+        self.image_label.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.LoadImg(self.projectName)
 
-        # Color Picker
-        self.TestColorpicker = CTkColorPicker(self, width=300, command=self.select_color1, initial_color=(self.solcolorprimary1)).pack()
-        self.confirm = ctk.CTkButton(self,command=self.Confirm_change_Color, text="Conferma Colore").pack()
+        self.update_preview(self.original_image)
+
+        self.rowconfigure(1, weight=1)
+        self.columnconfigure(0, weight=1)
+
+
+
+        self.frame = ctk.CTkScrollableFrame(self, orientation="vertical")
+        self.frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=(10,2))
         
+        
+        
+
+        # Color Picker
+
+        self.TestColorpicker = CTkColorPicker(self.frame, width=300, command=self.select_color1, initial_color=(self.solcolorprimary1))
+        self.TestColorpicker.grid(row=0, column=0, pady=5, padx=10, sticky="w")
+
+        self.confirm1 = ctk.CTkButton(self.frame, command=self.Confirm_change_Color1, text="Conferma Colore 1")
+        self.confirm1.grid(row=1, column=0, pady=5, padx=(80,0), sticky="w")
+
+        self.TestColorpicker2 = CTkColorPicker(self.frame, width=300, command=self.select_color2, initial_color=(self.solcolorprimary2))
+        self.TestColorpicker2.grid(row=0, column=3, pady=5, padx=10, sticky="w")
+
+        self.confirm2 = ctk.CTkButton(self.frame, command=self.Confirm_change_Color2, text="Conferma Colore 2")
+        self.confirm2.grid(row=1, column=3, pady=5, padx=(80,0), sticky="w")
+
+        self.TestColorpicker3 = CTkColorPicker(self.frame, width=300, command=self.select_color3, initial_color=(self.solcolorprimary3))
+        self.TestColorpicker3.grid(row=0, column=5, pady=5, padx=10, sticky="w")
+
+        self.confirm3 = ctk.CTkButton(self.frame, command=self.Confirm_change_Color3, text="Conferma Colore 3")
+        self.confirm3.grid(row=1, column=5, pady=5, padx=(80,0), sticky="w")
+
     
        
     # Utility Function
     
-    def Confirm_change_Color(self):
+    def Confirm_change_Color1(self):
         
         toRGBOld = self.HexToRGB(self.solcolorprimary1)
         toRGBNew = self.HexToRGB(self.solcolorprimary1New)
         self.replace_color_in_image(toRGBOld, toRGBNew)
         self.salvaSuFile()
+        self.solcolorprimary1 = self.solcolorprimary1New
         print(f"Colore 1 Salvato {self.solcolorprimary1}")
-
         
+
     def select_color1(self,color):
         self.solcolorprimary1New = color
         print(f"Colore 1 Selezionato : {self.solcolorprimary1New}")
-   
+    
+        
+    def Confirm_change_Color2(self):
+        
+        toRGBOld = self.HexToRGB(self.solcolorprimary2)
+        toRGBNew = self.HexToRGB(self.solcolorprimary2New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorprimary2 = self.solcolorprimary2New
+        print(f"Colore 2 Salvato {self.solcolorprimary2}")
+    
+    def select_color2(self,color):
+        self.solcolorprimary2New = color
+        print(f"Colore 2 Selezionato : {self.solcolorprimary2New}")
+    
+        
+    def Confirm_change_Color3(self):
+        
+        toRGBOld = self.HexToRGB(self.solcolorprimary3)
+        toRGBNew = self.HexToRGB(self.solcolorprimary3New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.solcolorprimary3 = self.solcolorprimary3New
+        self.salvaSuFile()
+        print(f"Colore 3 Salvato {self.solcolorprimary3}")
+    
+    def select_color3(self,color):
+        self.solcolorprimary3New = color
+        print(f"Colore 3 Selezionato : {self.solcolorprimary3New}")
+    
+    
+    
+    
     
     def printVal(self):
         print("\n")
@@ -343,13 +406,15 @@ class MainContent(ctk.CTkFrame):
     def update_preview(self, image):
         
         image.save(self.currentPath + "\\theme_img.png", format="PNG")
+        self.original_image = image     
         
         # Resize for Preview
         preview_image = image.copy()
-        preview_image.thumbnail((1440, 810), Image.LANCZOS)
+        preview_image.thumbnail((1080, 608), Image.LANCZOS)
         
-        self.tk_image = CTkImage(light_image=preview_image.convert("RGBA"), dark_image=preview_image.convert("RGBA"),size=(1440,810))
+        self.tk_image = CTkImage(light_image=preview_image.convert("RGBA"), dark_image=preview_image.convert("RGBA"),size=(1080,608))
         self.image_label.configure(image=self.tk_image)
+        
         
         
     def HexToRGB(self, hex):
@@ -369,18 +434,19 @@ class MainContent(ctk.CTkFrame):
             
         
     def replace_color_in_image(self, old, new):
-        if self.original_image is None or new is None:
+        
+        if self.original_image is None or new is None or old is None:
             print("Seleziona un'immagine e un colore da modificare.")
             return
 
-        # Converti l'immagine in un array numpy
+        # Convert img to an numpy array
         image_np = np.array(self.original_image)
 
-        # Tolleranza per trovare i pixel da cambiare
+         # Define Tollerance
         tolleranza = 1
         r, g, b = old
 
-        # Se l'immagine ha 3 canali (RGB)
+        # If Img have a 3 chanel (RGB)
         if image_np.shape[2] == 3:
             mask = (
                 (np.abs(image_np[:, :, 0] - r) < tolleranza) &
@@ -390,10 +456,10 @@ class MainContent(ctk.CTkFrame):
 
             image_np[mask] = new  # new deve essere (r, g, b)
 
-            # Crea la nuova immagine
+            # Create a new Img
             nuova_immagine = Image.fromarray(image_np.astype('uint8'), 'RGB')
 
-        # Se l'immagine ha 4 canali (RGBA)
+        # If Img have a 4 chanel (RGBA)
         elif image_np.shape[2] == 4:
             mask = (
                 (np.abs(image_np[:, :, 0] - r) < tolleranza) &
@@ -401,17 +467,17 @@ class MainContent(ctk.CTkFrame):
                 (np.abs(image_np[:, :, 2] - b) < tolleranza)
             )
 
-            # Aggiungi il valore alfa se manca
+            # Add alfa Value if missing
             if len(new) == 3:
                 new = (*new, 255)
 
-            image_np[mask] = new  # new deve essere (r, g, b, a)
+            image_np[mask] = new  # ned to be (r, g, b, a)
 
             nuova_immagine = Image.fromarray(image_np.astype('uint8'), 'RGBA')
 
         else:
-            print("Formato immagine non supportato.")
+            print("Immage Format not Supported.")
             return
 
-        # Aggiorna l'anteprima con l'immagine modificata
+        # Update Preview with the new Img
         self.update_preview(nuova_immagine)
