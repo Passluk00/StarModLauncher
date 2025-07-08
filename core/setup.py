@@ -156,7 +156,6 @@ class LoadSetup:
     def ModData(self, rootPath, projectName, data):
         
         
-        
         projectPath = self.ReadPath(projectName)
         
         

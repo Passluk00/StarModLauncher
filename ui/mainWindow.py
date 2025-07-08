@@ -334,16 +334,16 @@ class MainContent(ctk.CTkFrame):
     
     
         # Button
-        self.confirm21 = ctk.CTkButton(left_frame27, command=self.modLauncher, text="Conferma Colore 1")
+        self.confirm21 = ctk.CTkButton(left_frame27, command=self.Confirm_change_Color4, text="Conferma Colore 1")
         self.confirm21.pack(side="left", padx=110)
 
         # Button
-        self.confirm22 = ctk.CTkButton(center_frame28, command=self.modLauncher, text="Conferma Colore 2")
+        self.confirm22 = ctk.CTkButton(center_frame28, command=self.Confirm_change_Color5, text="Conferma Colore 2")
         self.confirm22.pack(side="left", padx=110)
 
         
         # Button
-        self.confirm23 = ctk.CTkButton(right_frame29, command=self.modLauncher, text="Conferma Colore 3")
+        self.confirm23 = ctk.CTkButton(right_frame29, command=self.Confirm_change_Color6, text="Conferma Colore 3")
         self.confirm23.pack(side="left", padx=110)
 
     
@@ -488,8 +488,6 @@ class MainContent(ctk.CTkFrame):
     
     
     
-    
-    
 
     
     def printVal(self):
@@ -609,46 +607,6 @@ class MainContent(ctk.CTkFrame):
         self.solcoloraccent2rgb = self.colors["--sol-color-accent-2-rgb"]
         self.solcoloraccent3rgb = self.colors["--sol-color-accent-3-rgb"]
         
-    
-    def modData(self):
-        
-        ToMod = {
-            "--sol-color-primary-1": self.solcolorprimary1New,
-            "--sol-color-primary-2": self.solcolorprimary2New,
-            "--sol-color-primary-3": self.solcolorprimary3New,
-            "--sol-color-primary-4": self.solcolorprimary4New,
-            "--sol-color-primary-5": self.solcolorprimary5New,
-            "--sol-color-primary-6": self.solcolorprimary6New,
-            "--sol-color-primary-7": self.solcolorprimary7New,
-            "--sol-color-primary-8": self.solcolorprimary8New,
-            
-            "--sol-color-neutral-1" :self.solcolorneutral1New,
-            "--sol-color-neutral-4" :self.solcolorneutral4New,
-            
-            "--sol-color-accent-1":  self.solcoloraccent1New,
-            "--sol-color-accent-2":  self.solcoloraccent2New,
-            "--sol-color-accent-3":  self.solcoloraccent3New,
-            
-            "--sol-c-game-page-background":  self.solcgamepagebackgroundNew,
-            
-            "--sol-color-primary-1-rgb":  self.solcolorprimary1rgbNew,
-            "--sol-color-primary-2-rgb":  self.solcolorprimary2rgbNew,
-            "--sol-color-primary-3-rgb":  self.solcolorprimary3rgbNew,
-            "--sol-color-primary-4-rgb":  self.solcolorprimary4rgbNew,
-            "--sol-color-primary-5-rgb":  self.solcolorprimary5rgbNew,
-            "--sol-color-primary-6-rgb":  self.solcolorprimary6rgbNew,
-            "--sol-color-primary-7-rgb":  self.solcolorprimary7rgbNew,
-            "--sol-color-primary-8-rgb":  self.solcolorprimary8rgbNew,
-            
-            "--sol-color-neutral-1-rgb": self.solcolorneutral1rgbNew,
-            
-            "--sol-color-accent-1-rgb": self.solcoloraccent1rgbNew,
-            "--sol-color-accent-2-rgb": self.solcoloraccent2rgbNew,
-            "--sol-color-accent-3-rgb": self.solcoloraccent3rgbNew,
-        }
-        
-        self.setup.ModData(self, self.currentPath, ToMod)
-    
         
     def loadOrCreateSetup(self,projectName):
         
@@ -665,8 +623,7 @@ class MainContent(ctk.CTkFrame):
             logging.info(INFO_SAVE_SUCCESSFUL)
             self.loadColor(projectName)
             logging.info(INFO_LOADING_COLOR_DATA)
-        
-              
+           
             
     def LoadImg(self, projectName):
         
