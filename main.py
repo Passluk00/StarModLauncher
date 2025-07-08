@@ -1,5 +1,12 @@
+import logging
+from core.log import *
 from ui.app import App
 
 
-if __name__ == "__main__":
+def main():
+    logging.info(LOG_STARTUP)
     App()
+    
+
+if __name__ == "__main__":
+    main()

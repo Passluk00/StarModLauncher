@@ -1,8 +1,9 @@
 import os
 import tkinter as tk
+import logging
+from core.log import *
 from tkinter import ttk, filedialog, messagebox, simpledialog
 from ui.topWindow import TopWindow
-import subprocess
 import uuid
 
 import customtkinter as ctk
@@ -18,7 +19,8 @@ class SideBar(ctk.CTkFrame):
         self.setup = setup
         self.mainContent = mainContent
         self.projects = setup.GetData().get("Projects", [])
-        print(f"dati progetti: {self.projects}")
+        logging.info(LOAD_ALL_PROJECTS + f"{self.projects}")
+        
         
     
         # Pulsante per selezionare la root path del file sorgente
@@ -53,14 +55,17 @@ class SideBar(ctk.CTkFrame):
         
     def add_project(self):
         
+        logging.info(CREATE_NEW_PROJECT)
         new_project_name = simpledialog.askstring("New Project", "Insert Name For the Project:")
         
         if not new_project_name:
+            logging.warning(ERROR_EMPTY_PROJECT_NAME)
             messagebox.showerror("Error", "Project name cannot be empty!")
             return
         
         if new_project_name:
             if new_project_name in self.projects:
+                logging.warning(ERROR_PROJECT_NAME_ALREADY_IN_USE)
                 messagebox.showwarning("Error", "Project already exist!")
                 return
 
@@ -85,7 +90,8 @@ class SideBar(ctk.CTkFrame):
         pathFile = self.setup.GetOriginalPath()
 
         if not os.path.exists(pathFile):
-            print( f"Errore apertura file il percorso non è valido: {pathFile}")
+            logging.error(ERROR_INVALID_FILE_PATH.format(pathFile))
+            
 
         extraction_path = os.path.join(os.getcwd(), "projects" , newProjectName)  # Definisci la cartella dove vuoi decomprimere
     
@@ -93,6 +99,7 @@ class SideBar(ctk.CTkFrame):
         if not os.path.exists(extraction_path):
             os.makedirs(extraction_path)
             print(f"Cartella creata: {extraction_path}")
+            logging.info(NEW_FOLDER.format(extraction_path))
             
         self.setup.SaveData(newProjectName, "Path", extraction_path)
 
@@ -100,35 +107,6 @@ class SideBar(ctk.CTkFrame):
 
 
 
-    ###  TODO   Da spostare ora non viene piu decompressa al momento della creazione del progetto ma quando viene applicato
-    def decomprimi(self, newProjectName):
-
-         
-    
-        com = f'npx asar extract "{pathFile}" {extraction_path}'
-        
-        print(f"Comando: {com}")
-
-        try: 
-            subprocess.run(com, check=True, shell=True)
-            
-            
-            
-            self.setup.SaveData(newProjectName, "Path", extraction_path)
-            
-            
-            print("Estrazione avventua con successo!")
-        except subprocess.CalledProcessError as e:
-        # Stampa l'errore specifico che si verifica durante l'esecuzione del comando
-            print(f"Errore durante l'estrazione: {e}")
-            print(f"Output: {e.output}")
-            print(f"Codice di ritorno: {e.returncode}")
-        except FileNotFoundError as e:
-        # Gestione dell'errore se il comando o il programma non è trovato
-            print(f"Comando non trovato: {e}")
-        except Exception as e:
-        # Gestione di eventuali altri errori generali
-            print(f"Errore generico: {e}")
 
 
     # Open the file selector Window

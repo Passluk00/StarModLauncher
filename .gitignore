@@ -13,6 +13,7 @@ fileHandler/
 config.json
 todo.txt
 test.py
+log.log
 
 # Distribution / packaging
 .Python

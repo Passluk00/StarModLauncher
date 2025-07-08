@@ -1,11 +1,16 @@
+import logging
+from core.log import *
+
 import tkinter as tk
+import customtkinter as ctk
+
 from core.config import name, version, minDim
 from ui.sideBar import SideBar
 
 from ui.mainWindow import MainContent
 from core.setup import LoadSetup
 
-import customtkinter as ctk
+
 
 
 
@@ -18,7 +23,7 @@ class App(ctk.CTk):
         self.setup = LoadSetup()
         
         
-        
+        logging.info(INIT_SCREEN)
         x = (self.winfo_screenwidth() // 2) - (minDim[0] // 2)
         y = (self.winfo_screenheight() // 2) - (minDim[1] // 2)
         

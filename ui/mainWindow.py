@@ -2,6 +2,8 @@ import tkinter as tk
 import shutil
 import os
 import numpy as np
+import logging
+from core.log import *
 from PIL import Image
 from tkinter import ttk, colorchooser
 from tkhtmlview import HTMLLabel
@@ -51,7 +53,7 @@ class MainContent(ctk.CTkFrame):
         self.solcolorprimary8 = "#add4eb"            # Usage: Most of the launcher text utilises this together with --sol-color-neutral-4
         
         self.solcolorneutral1 = "#000"               # Usage: Button text and other primary text elements.
-        self.solcolorneutral4 = "#FFF"               # Usage: Most of the launcher text utilises this together with --sol-color-primary-8
+        self.solcolorneutral4 = "#FFFFFF"               # Usage: Most of the launcher text utilises this together with --sol-color-primary-8
         
         self.solcoloraccent1 = "#54adf7"             # Usage: Default state for accent elements, such as buttons or highlights.
         self.solcoloraccent2 = "#6db9f8"             # Usage: Pressed state for interactive accented elements
@@ -125,43 +127,228 @@ class MainContent(ctk.CTkFrame):
     
         # Preview Image
         self.image_label = ctk.CTkLabel(self, text="", width=1080, height=608)
-        self.image_label.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.image_label.grid(row=0, column=2, sticky="nsew", padx=10, pady=10)
         self.LoadImg(self.projectName)
 
         self.update_preview(self.original_image)
 
         self.rowconfigure(1, weight=1)
-        self.columnconfigure(0, weight=1)
-
-
+        self.columnconfigure(2, weight=1)
 
         self.frame = ctk.CTkScrollableFrame(self, orientation="vertical")
-        self.frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=(10,2))
+        self.frame.grid(row=1, column=2, sticky="nsew", padx=150, pady=(10,2))
         
         
         
 
-        # Color Picker
+        # Scrollable Elements
 
-        self.TestColorpicker = CTkColorPicker(self.frame, width=300, command=self.select_color1, initial_color=(self.solcolorprimary1))
-        self.TestColorpicker.grid(row=0, column=0, pady=5, padx=10, sticky="w")
+        
+        ##############################################################################################################################
+        
+        
+# First Row
+        self.row1 = ctk.CTkFrame(self.frame, fg_color="transparent")
+        self.row1.pack(fill="x", pady=(20,20))
+        
+        
+    # Sub Row 1: Label
+        self.label1 = ctk.CTkFrame(self.row1, fg_color="transparent")
+        self.label1.pack(fill="x")
+        
+        
+        # Sub-frame Left
+        left_frame11 = ctk.CTkFrame(self.label1, fg_color="transparent")
+        left_frame11.pack(side="left", expand=True)
 
-        self.confirm1 = ctk.CTkButton(self.frame, command=self.Confirm_change_Color1, text="Conferma Colore 1")
-        self.confirm1.grid(row=1, column=0, pady=5, padx=(80,0), sticky="w")
+        # Sub-frame Central
+        center_frame12 = ctk.CTkFrame(self.label1, fg_color="transparent")
+        center_frame12.pack(side="left", expand=True)
 
-        self.TestColorpicker2 = CTkColorPicker(self.frame, width=300, command=self.select_color2, initial_color=(self.solcolorprimary2))
-        self.TestColorpicker2.grid(row=0, column=3, pady=5, padx=10, sticky="w")
+        # Sub-frame Right
+        right_frame13 = ctk.CTkFrame(self.label1, fg_color="transparent")
+        right_frame13.pack(side="left", expand=True)
 
-        self.confirm2 = ctk.CTkButton(self.frame, command=self.Confirm_change_Color2, text="Conferma Colore 2")
-        self.confirm2.grid(row=1, column=3, pady=5, padx=(80,0), sticky="w")
 
-        self.TestColorpicker3 = CTkColorPicker(self.frame, width=300, command=self.select_color3, initial_color=(self.solcolorprimary3))
-        self.TestColorpicker3.grid(row=0, column=5, pady=5, padx=10, sticky="w")
+        # Label
+        self.lab11 = ctk.CTkLabel(left_frame11, text="--sol-color-primary-1", text_color="white", font=("Arial", 20, "bold"))
+        self.lab11.pack(side="left", padx=90)
 
-        self.confirm3 = ctk.CTkButton(self.frame, command=self.Confirm_change_Color3, text="Conferma Colore 3")
-        self.confirm3.grid(row=1, column=5, pady=5, padx=(80,0), sticky="w")
+        # Label
+        self.lab12 = ctk.CTkLabel(center_frame12, text="--sol-color-primary-2", text_color="white", font=("Arial", 20, "bold"))
+        self.lab12.pack(side="right", padx=90)
+
+        # Label
+        self.lab13 = ctk.CTkLabel(right_frame13, text="--sol-color-primary-3", text_color="white", font=("Arial", 20, "bold"))
+        self.lab13.pack(side="right", padx=90)
+
+
+    # Sub Row 2: Color Picker
+        self.ColorPicker1 = ctk.CTkFrame(self.frame, fg_color="transparent")
+        self.ColorPicker1.pack(fill="x", pady=5)
+
+        # Sub-frame Left
+        left_frame14 = ctk.CTkFrame(self.ColorPicker1, fg_color="transparent")
+        left_frame14.pack(side="left", expand=True)
+
+        # Sub-frame Central
+        center_frame15 = ctk.CTkFrame(self.ColorPicker1, fg_color="transparent")
+        center_frame15.pack(side="left", expand=True)
+
+        # Sub-frame Right
+        right_frame16 = ctk.CTkFrame(self.ColorPicker1, fg_color="transparent")
+        right_frame16.pack(side="left", expand=True)
+
+
+        # ColorPicker
+        self.Colorpicker11 = CTkColorPicker(left_frame14, width=300, command=self.select_color1, initial_color="#FF0000")
+        self.Colorpicker11.pack(padx=10)
+
+        # ColorPicker
+        self.Colorpicker12 = CTkColorPicker(center_frame15, width=300, command=self.select_color2, initial_color="#FF0000")
+        self.Colorpicker12.pack(padx=10)
+
+        # ColorPicker
+        self.Colorpicker13 = CTkColorPicker(right_frame16, width=300, command=self.select_color3, initial_color="#FF0000")
+        self.Colorpicker13.pack(padx=10)
+
+
+    # Sub Row 2: Button
+        self.button1 = ctk.CTkFrame(self.frame, fg_color="transparent")
+        self.button1.pack(fill="x", pady=5)
+
+
+        # Sub-frame Left
+        left_frame17 = ctk.CTkFrame(self.button1, fg_color="transparent")
+        left_frame17.pack(side="left", expand=True)
+
+        # Sub-frame Center
+        center_frame18 = ctk.CTkFrame(self.button1, fg_color="transparent")
+        center_frame18.pack(side="left", expand=True)
+
+        # Sub-frame Right
+        right_frame19 = ctk.CTkFrame(self.button1, fg_color="transparent")
+        right_frame19.pack(side="left", expand=True)
+
+
+        # Button
+        self.confirm11 = ctk.CTkButton(left_frame17, command=self.Confirm_change_Color1, text="Conferma Colore 1")
+        self.confirm11.pack(side="left", padx=110)
+
+        # Button
+        self.confirm12 = ctk.CTkButton(center_frame18, command=self.Confirm_change_Color2, text="Conferma Colore 2")
+        self.confirm12.pack(side="left", padx=110)
+
+        
+        # Button    TODO attualmente usato per provare modificare i file
+        self.confirm13 = ctk.CTkButton(right_frame19, command=self.modLauncher, text="Conferma Colore 3")
+        self.confirm13.pack(side="left", padx=110)
 
     
+        ##############################################################################################################################
+        
+        
+# Second Row    
+        self.row2 = ctk.CTkFrame(self.frame, fg_color="transparent")
+        self.row2.pack(fill="x", pady=(20,20))
+            
+            
+    # Sub Row 1: Label        
+        self.label2 = ctk.CTkFrame(self.row2, fg_color="transparent")
+        self.label2.pack(fill="x")
+        
+        
+        # Sub-frame Left
+        left_frame21 = ctk.CTkFrame(self.label2, fg_color="transparent")
+        left_frame21.pack(side="left", expand=True)
+
+        # Sub-frame Central
+        center_frame22 = ctk.CTkFrame(self.label2, fg_color="transparent")
+        center_frame22.pack(side="left", expand=True)
+
+        # Sub-frame Right
+        right_frame23 = ctk.CTkFrame(self.label2, fg_color="transparent")
+        right_frame23.pack(side="left", expand=True)
+
+
+        # Label
+        self.lab21 = ctk.CTkLabel(left_frame21, text="--sol-color-primary-4", text_color="white", font=("Arial", 20, "bold"))
+        self.lab21.pack(side="left", padx=90)
+
+        # Label
+        self.lab22 = ctk.CTkLabel(center_frame22, text="--sol-color-primary-5", text_color="white", font=("Arial", 20, "bold"))
+        self.lab22.pack(side="right", padx=90)
+
+        # Label
+        self.lab23 = ctk.CTkLabel(right_frame23, text="--sol-color-primary-6", text_color="white", font=("Arial", 20, "bold"))
+        self.lab23.pack(side="right", padx=90)
+
+        
+    # Sub Row 2: Color Picker
+        self.ColorPicker2 = ctk.CTkFrame(self.row2, fg_color="transparent")
+        self.ColorPicker2.pack(fill="x")
+    
+    
+        # Sub-frame Left
+        left_frame24 = ctk.CTkFrame(self.ColorPicker2, fg_color="transparent")
+        left_frame24.pack(side="left", expand=True)
+
+        # Sub-frame Center
+        center_frame25 = ctk.CTkFrame(self.ColorPicker2, fg_color="transparent")
+        center_frame25.pack(side="left", expand=True)
+
+        # Sub-frame Right
+        right_frame26 = ctk.CTkFrame(self.ColorPicker2, fg_color="transparent")
+        right_frame26.pack(side="left", expand=True)
+
+
+        # ColorPicker
+        self.Colorpicker21 = CTkColorPicker(left_frame24, width=300, command=self.select_color4, initial_color="#FF0000")
+        self.Colorpicker21.pack(padx=10)
+
+        # ColorPicker
+        self.Colorpicker22 = CTkColorPicker(center_frame25, width=300, command=self.select_color5, initial_color="#FF0000")
+        self.Colorpicker22.pack(padx=10)
+
+        # ColorPicker
+        self.Colorpicker23 = CTkColorPicker(right_frame26, width=300, command=self.select_color_neutral_4, initial_color="#00FF00")
+        self.Colorpicker23.pack(padx=10)
+
+
+    # Sub Row 2: Button
+        self.Button2 = ctk.CTkFrame(self.row2, fg_color="transparent")
+        self.Button2.pack(fill="x")
+
+
+        # Sub-frame Left
+        left_frame27 = ctk.CTkFrame(self.Button2, fg_color="transparent")
+        left_frame27.pack(side="left", expand=True)
+
+        # Sub-frame Central
+        center_frame28 = ctk.CTkFrame(self.Button2, fg_color="transparent")
+        center_frame28.pack(side="left", expand=True)
+
+        # Sub-frame Right
+        right_frame29 = ctk.CTkFrame(self.Button2, fg_color="transparent")
+        right_frame29.pack(side="left", expand=True)
+    
+    
+        # Button
+        self.confirm21 = ctk.CTkButton(left_frame27, command=self.modLauncher, text="Conferma Colore 1")
+        self.confirm21.pack(side="left", padx=110)
+
+        # Button
+        self.confirm22 = ctk.CTkButton(center_frame28, command=self.modLauncher, text="Conferma Colore 2")
+        self.confirm22.pack(side="left", padx=110)
+
+        
+        # Button
+        self.confirm23 = ctk.CTkButton(right_frame29, command=self.modLauncher, text="Conferma Colore 3")
+        self.confirm23.pack(side="left", padx=110)
+
+    
+       
+       
        
     # Utility Function
     
@@ -172,9 +359,9 @@ class MainContent(ctk.CTkFrame):
         self.replace_color_in_image(toRGBOld, toRGBNew)
         self.salvaSuFile()
         self.solcolorprimary1 = self.solcolorprimary1New
+        logging.info(COLOR_NUM_SAVED.format(1,self.solcolorprimary1))
         print(f"Colore 1 Salvato {self.solcolorprimary1}")
-        
-
+    
     def select_color1(self,color):
         self.solcolorprimary1New = color
         print(f"Colore 1 Selezionato : {self.solcolorprimary1New}")
@@ -187,6 +374,7 @@ class MainContent(ctk.CTkFrame):
         self.replace_color_in_image(toRGBOld, toRGBNew)
         self.salvaSuFile()
         self.solcolorprimary2 = self.solcolorprimary2New
+        logging.info(COLOR_NUM_SAVED.format(2,self.solcolorprimary2))
         print(f"Colore 2 Salvato {self.solcolorprimary2}")
     
     def select_color2(self,color):
@@ -201,15 +389,108 @@ class MainContent(ctk.CTkFrame):
         self.replace_color_in_image(toRGBOld, toRGBNew)
         self.solcolorprimary3 = self.solcolorprimary3New
         self.salvaSuFile()
+        logging.info(COLOR_NUM_SAVED.format(3,self.solcolorprimary3))
         print(f"Colore 3 Salvato {self.solcolorprimary3}")
-    
+
     def select_color3(self,color):
         self.solcolorprimary3New = color
         print(f"Colore 3 Selezionato : {self.solcolorprimary3New}")
+
+    
+    def Confirm_change_Color4(self):
+        
+        toRGBOld = self.HexToRGB(self.solcolorprimary4)
+        toRGBNew = self.HexToRGB(self.solcolorprimary4New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorprimary4 = self.solcolorprimary4New
+        logging.info(COLOR_NUM_SAVED.format(4,self.solcolorprimary4))
+        print(f"Colore 4 Salvato {self.solcolorprimary4}")
+    
+    def select_color4(self,color):
+        self.solcolorprimary4New = color
+        print(f"Colore 4 Selezionato : {self.solcolorprimary4New}")
+    
+    
+    def Confirm_change_Color5(self):
+        
+        toRGBOld = self.HexToRGB(self.solcolorprimary5)
+        toRGBNew = self.HexToRGB(self.solcolorprimary5New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorprimary5 = self.solcolorprimary5New
+        logging.info(COLOR_NUM_SAVED.format(5,self.solcolorprimary5))
+        print(f"Colore 5 Salvato {self.solcolorprimary5}")
+        
+    def select_color5(self,color):
+        self.solcolorprimary5New = color
+        print(f"Colore 5 Selezionato : {self.solcolorprimary5New}")
+    
+    
+    def Confirm_change_Color6(self):
+    
+        toRGBOld = self.HexToRGB(self.solcolorprimary6)
+        toRGBNew = self.HexToRGB(self.solcolorprimary6New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorprimary6 = self.solcolorprimary6New
+        logging.info(COLOR_NUM_SAVED.format(6,self.solcolorprimary6))
+        print(f"Colore 6 Salvato {self.solcolorprimary6}")
+    
+    def select_color6(self,color):
+        self.solcolorprimary6New = color
+        print(f"Colore 6 Selezionato : {self.solcolorprimary6New}")
+    
+        
+    def Confirm_change_Color7(self):
+    
+        toRGBOld = self.HexToRGB(self.solcolorprimary7)
+        toRGBNew = self.HexToRGB(self.solcolorprimary7New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorprimary7 = self.solcolorprimary7New
+        logging.info(COLOR_NUM_SAVED.format(7,self.solcolorprimary7))
+        print(f"Colore 7 Salvato {self.solcolorprimary7}")
+    
+    def select_color7(self,color):
+        self.solcolorprimary7New = color
+        print(f"Colore 7 Selezionato : {self.solcolorprimary7New}")
+    
+    
+    def Confirm_change_Color8(self):
+        
+        toRGBOld = self.HexToRGB(self.solcolorprimary8)
+        toRGBNew = self.HexToRGB(self.solcolorprimary8New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorprimary8 = self.solcolorprimary8New
+        logging.info(COLOR_NUM_SAVED.format(8,self.solcolorprimary8))
+        print(f"Colore 8 Salvato {self.solcolorprimary8}")
+        
+    def select_color8(self,color):
+        self.solcolorprimary8New = color
+        print(f"Colore 8 Selezionato : {self.solcolorprimary8New}")
+    
+    
+    def Confirm_change_Color_neutral_4(self):
+    
+        toRGBOld = self.HexToRGB(self.solcolorneutral4)
+        toRGBNew = self.HexToRGB(self.solcolorneutral4New)
+        self.replace_color_in_image(toRGBOld, toRGBNew)
+        self.salvaSuFile()
+        self.solcolorneutral4 = self.solcolorneutral4New
+        logging.info(COLOR_NUM_SAVED.format(4,self.solcolorneutral4))
+        print(f"Colore Neutrl 4 Salvato {self.solcolorneutral4}")
+    
+    def select_color_neutral_4(self,color):
+        self.solcolorneutral4New = color
+        print(f"Colore Neutral 4 Selezionato : {self.solcolorneutral4New}")
     
     
     
     
+    
+
     
     def printVal(self):
         print("\n")
@@ -284,11 +565,14 @@ class MainContent(ctk.CTkFrame):
             "--sol-color-accent-3-rgb": self.solcoloraccent3rgbNew,            
             
         }
+        logging.info(SAVING_ALL_COLORS_TO_FILE)
        
         self.setup.SaveData(self.projectName, "colors", colors)
 
 
     def loadColor(self, projectname):
+        
+        logging.info(LOADING_ALL_COLORS_FROM_FILE)
         
         self.colors = self.setup.LoadData(projectname, "colors")
         
@@ -370,15 +654,18 @@ class MainContent(ctk.CTkFrame):
         
         try:
             self.loadColor(projectName)
-            print(f"Loading colors from file was successfully")
+            logging.info(COLORS_LOADED_SUCCESSFULLY)
         
         except:
-            print("Loading from file Failed")
-            print("Save default Data in File")
+            
+            logging.error(ERROR_LOADING_FROM_FILE)
+            logging.info(INFO_SAVING_DEFAULT_DATA)
             self.salvaSuFile()
-            print("Save in file was Successful")
+            
+            logging.info(INFO_SAVE_SUCCESSFUL)
             self.loadColor(projectName)
-            print("Load Color Data From File")
+            logging.info(INFO_LOADING_COLOR_DATA)
+        
               
             
     def LoadImg(self, projectName):
@@ -387,20 +674,16 @@ class MainContent(ctk.CTkFrame):
         file_path = project_path + "\\theme_img.png"
         
         if os.path.isfile(file_path):
-            print(f"File found: {file_path}")
+            logging.info(FILE_FOUND.format(file_path))
             self.original_image = Image.open(file_path).convert("RGBA")
             
             
         else:
-            print("File not found will be created now")
+            logging.info(WARNING_FILE_NOT_FOUND.format(" will be created now"))
             shutil.copyfile("ui\\asset\\default_img.png", file_path)
             self.original_image = Image.open(file_path).convert("RGBA")        
         
         self.update_preview(self.original_image)
-        
-        
-        
-        
         
     
     def update_preview(self, image):
@@ -414,7 +697,6 @@ class MainContent(ctk.CTkFrame):
         
         self.tk_image = CTkImage(light_image=preview_image.convert("RGBA"), dark_image=preview_image.convert("RGBA"),size=(1080,608))
         self.image_label.configure(image=self.tk_image)
-        
         
         
     def HexToRGB(self, hex):
@@ -436,7 +718,7 @@ class MainContent(ctk.CTkFrame):
     def replace_color_in_image(self, old, new):
         
         if self.original_image is None or new is None or old is None:
-            print("Seleziona un'immagine e un colore da modificare.")
+            logging.warning("Select an immage and one color to modify")
             return
 
         # Convert img to an numpy array
@@ -476,8 +758,25 @@ class MainContent(ctk.CTkFrame):
             nuova_immagine = Image.fromarray(image_np.astype('uint8'), 'RGBA')
 
         else:
-            print("Immage Format not Supported.")
+            logging.error(FORMAT_NOT_SUPPORTED)
             return
 
         # Update Preview with the new Img
         self.update_preview(nuova_immagine)
+
+
+    def modLauncher(self, ):
+        pathFile = self.setup.GetRootPath()
+        
+        if not pathFile:
+            logging.error(ERROR_APP_NOT_FOUND)
+            raise FileNotFoundError("app.asar Not Found")
+        
+        data = self.setup.LoadData(self.projectName,"colors")
+        
+        if not data:
+            logging.error(ERROR_DATA_NOT_FOUND)
+            raise FileNotFoundError("Project data not found")
+        
+        self.setup.ModData(pathFile,self.projectName ,data)
+        
